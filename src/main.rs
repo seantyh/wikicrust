@@ -24,10 +24,11 @@ fn main() -> Result<()> {
         let path = entry.path();
         let path_str = path.into_os_string().into_string().unwrap();
         if path_str.ends_with(".gz"){
-            println!("{:?}", path_str);
+            print!("{:?} ... ", path_str);
             let tick = SystemTime::now();
             process_gz_file(&path_str, &mut ent_freqs)?;
-            println!("{}sec", tick.elapsed().unwrap().as_millis()/1000)
+            let elapsed = tick.elapsed().unwrap().as_millis() as f64;
+            println!("{}sec", elapsed/1000.)
         }
     }
 

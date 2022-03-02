@@ -11,9 +11,12 @@ use flate2::read::GzDecoder;
 
 
 fn main() -> Result<()> {
-    let dir_str = std::env::args().nth(1).expect("no path specified");
-    let target_dir = Path::new(&dir_str).file_name().expect("Path error");
-    println!("{:?}", target_dir);
+    let mut args = std::env::args();
+
+    let dir_str = args.nth(1).unwrap_or("./data".to_string());                
+    let target_dir = Path::new(&dir_str);
+    let target_name = target_dir.file_name().expect("Path Error").to_os_string().into_string().unwrap();
+    println!("target_dir: {:?}", target_dir);
     let mut ent_freqs: HashMap<String, u32> = HashMap::new();
     
     for entry in fs::read_dir(&target_dir)? {
@@ -28,7 +31,7 @@ fn main() -> Result<()> {
         }
     }
 
-    save_ent_freqs(&ent_freqs, &"out.json")?;
+    save_ent_freqs(&ent_freqs, &format!("{}.json", &target_name))?;
     Ok(())
 }
 
